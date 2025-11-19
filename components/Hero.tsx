@@ -1,4 +1,5 @@
 import styles from './Hero.module.css';
+import Link from 'next/link';
 
 export default function Hero() {
     return (
@@ -19,7 +20,7 @@ export default function Hero() {
                 </p>
                 <div className={styles.actions}>
                     <button className="btn btn-primary">View Latest Reports</button>
-                    <button className={styles.secondaryBtn}>Explore Analysis</button>
+                    <Link href="/chat" className={styles.secondaryBtn}>Consult AI Assistant</Link>
                 </div>
             </div>
         </section>

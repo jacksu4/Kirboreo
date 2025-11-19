@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: "Global equity research and stock analysis with a focus on US Tech.",
 };
 
+
+
 export default function RootLayout({
   children,
 }: Readonly<{
