@@ -1,9 +1,12 @@
 import { openai } from '@ai-sdk/openai';
 import { generateText } from 'ai';
 import { NextRequest, NextResponse } from 'next/server';
-import yahooFinance from 'yahoo-finance2';
+import YahooFinance from 'yahoo-finance2';
 
 export const maxDuration = 60;
+
+// Initialize Yahoo Finance
+const yahooFinance = new YahooFinance();
 
 // Simple in-memory cache (5 minutes TTL)
 const cache = new Map<string, { data: any; timestamp: number }>();
