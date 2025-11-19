@@ -98,13 +98,18 @@ async function getNewsFromYahoo(ticker: string, companyName?: string): Promise<N
   try {
     console.log(`Fetching news for ${ticker}${companyName ? ` (${companyName})` : ''}`);
     
-    // Try to get news using the ticker first
+    // Strategy: Fetch more news to ensure we have enough after filtering
     const searchResult = await yahooFinance.search(ticker, {
-      newsCount: 20 // Fetch more to account for filtering
+      newsCount: 50 // Increased from 20 to 50 to ensure enough results
     });
 
     const news = searchResult.news || [];
     console.log(`Found ${news.length} news items (before filtering)`);
+
+    if (news.length === 0) {
+      console.warn(`No news found for ${ticker}`);
+      return [];
+    }
 
     // Parse all news items first
     const parsedNews = news.map((item: any) => {
@@ -135,15 +140,73 @@ async function getNewsFromYahoo(ticker: string, companyName?: string): Promise<N
       };
     });
 
-    // Filter news for relevance
-    const relevantNews = parsedNews.filter(item => 
+    // First pass: Strict filtering for highly relevant news
+    let relevantNews = parsedNews.filter(item => 
       isNewsRelevant(item.title, ticker, companyName)
     );
 
-    console.log(`After filtering: ${relevantNews.length} relevant news items`);
+    console.log(`After strict filtering: ${relevantNews.length} relevant news items`);
 
-    // Return up to 10 relevant items
-    return relevantNews.slice(0, 10);
+    // If we have fewer than 10 items, try relaxed filtering
+    if (relevantNews.length < 10) {
+      console.log(`Only ${relevantNews.length} items found with strict filtering, trying relaxed filtering...`);
+      
+      // Relaxed filtering: Just check if ticker appears anywhere in title (case-insensitive)
+      const tickerLower = ticker.toLowerCase();
+      const companyLower = companyName?.toLowerCase();
+      
+      const relaxedNews = parsedNews.filter(item => {
+        const titleLower = item.title.toLowerCase();
+        
+        // Include if ticker is mentioned
+        if (titleLower.includes(tickerLower)) {
+          return true;
+        }
+        
+        // Include if company name is mentioned (if available)
+        if (companyLower && titleLower.includes(companyLower)) {
+          return true;
+        }
+        
+        // For crypto (BTC-USD, ETH-USD), also check without -USD
+        if (ticker.endsWith('-USD')) {
+          const baseTicker = ticker.replace('-USD', '').toLowerCase();
+          if (titleLower.includes(baseTicker)) {
+            return true;
+          }
+        }
+        
+        return false;
+      });
+      
+      // Remove duplicates (in case some items passed both strict and relaxed)
+      const seenUrls = new Set(relevantNews.map(item => item.url));
+      const additionalNews = relaxedNews.filter(item => !seenUrls.has(item.url));
+      
+      relevantNews = [...relevantNews, ...additionalNews];
+      console.log(`After relaxed filtering: ${relevantNews.length} total relevant news items`);
+    }
+
+    // Sort by date (most recent first)
+    relevantNews.sort((a, b) => 
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    );
+
+    // Filter to only include news from last 7 days (unless we don't have enough)
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    
+    const recentNews = relevantNews.filter(item => 
+      new Date(item.publishedAt) >= sevenDaysAgo
+    );
+
+    // If we have at least 10 recent items, use those; otherwise use all available
+    const finalNews = recentNews.length >= 10 ? recentNews : relevantNews;
+    
+    console.log(`Final selection: ${finalNews.length} news items (${recentNews.length} from last 7 days)`);
+
+    // Return up to 10 items
+    return finalNews.slice(0, 10);
   } catch (error) {
     console.error('Error fetching news from Yahoo:', error);
     return [];
@@ -359,10 +422,13 @@ export async function POST(req: NextRequest) {
       }, { status: 404 });
     }
 
-    // Log warnings if one of the data sources failed
+    // Log warnings if one of the data sources failed or returned few results
     if (headlines.length === 0) {
       console.warn(`No news found for ${normalizedTicker}, but price data available`);
+    } else if (headlines.length < 10) {
+      console.warn(`Only ${headlines.length} news items found for ${normalizedTicker} (expected 10)`);
     }
+    
     if (priceData.price === 0) {
       console.warn(`No price data for ${normalizedTicker}, but news available`);
     }
