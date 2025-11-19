@@ -17,7 +17,10 @@ export default function Navbar() {
                     <Link href="/about" className={styles.link}>About</Link>
                 </div>
 
-                <button className="btn btn-primary">Get Started</button>
+                <Link href="/about#contact" className={styles.contactButton}>
+                    <span className={styles.contactIcon}>✉️</span>
+                    <span>Contact Us</span>
+                </Link>
             </div>
         </nav>
     );

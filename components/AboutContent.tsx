@@ -1,6 +1,65 @@
+'use client';
+
+import { useState, FormEvent } from 'react';
 import styles from './AboutContent.module.css';
 
 export default function AboutContent() {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: ''
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState<{
+        type: 'success' | 'error' | null;
+        message: string;
+    }>({ type: null, message: '' });
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setSubmitStatus({ type: null, message: '' });
+
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setSubmitStatus({
+                    type: 'success',
+                    message: 'Thank you! Your message has been sent successfully. We\'ll get back to you soon.'
+                });
+                setFormData({ name: '', email: '', message: '' });
+            } else {
+                setSubmitStatus({
+                    type: 'error',
+                    message: data.error || 'Failed to send message. Please try again.'
+                });
+            }
+        } catch (error) {
+            setSubmitStatus({
+                type: 'error',
+                message: 'Network error. Please check your connection and try again.'
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setFormData({
+            ...formData,
+            [e.target.id]: e.target.value
+        });
+    };
+
     return (
         <div className={styles.container}>
             <section className={styles.storySection}>
@@ -84,23 +143,67 @@ export default function AboutContent() {
                 </div>
             </section>
 
-            <section className={styles.contactSection}>
+            <section className={styles.contactSection} id="contact">
                 <div className={`glass-panel ${styles.contactCard}`}>
                     <h2 className={styles.subheading}>Get in Touch</h2>
-                    <form className={styles.form}>
+                    <p className={styles.contactDescription}>
+                        Have a question about our research? Interested in collaboration? We'd love to hear from you.
+                    </p>
+                    
+                    <form className={styles.form} onSubmit={handleSubmit}>
                         <div className={styles.formGroup}>
                             <label htmlFor="name">Name</label>
-                            <input type="text" id="name" className={styles.input} placeholder="Your name" />
+                            <input 
+                                type="text" 
+                                id="name" 
+                                className={styles.input} 
+                                placeholder="Your name" 
+                                value={formData.name}
+                                onChange={handleChange}
+                                required
+                                disabled={isSubmitting}
+                            />
                         </div>
                         <div className={styles.formGroup}>
                             <label htmlFor="email">Email</label>
-                            <input type="email" id="email" className={styles.input} placeholder="your@email.com" />
+                            <input 
+                                type="email" 
+                                id="email" 
+                                className={styles.input} 
+                                placeholder="your@email.com" 
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                                disabled={isSubmitting}
+                            />
                         </div>
                         <div className={styles.formGroup}>
                             <label htmlFor="message">Message</label>
-                            <textarea id="message" className={styles.textarea} placeholder="How can we help?" rows={4}></textarea>
+                            <textarea 
+                                id="message" 
+                                className={styles.textarea} 
+                                placeholder="How can we help?" 
+                                rows={4}
+                                value={formData.message}
+                                onChange={handleChange}
+                                required
+                                disabled={isSubmitting}
+                            ></textarea>
                         </div>
-                        <button type="submit" className="btn btn-primary">Send Message</button>
+                        
+                        {submitStatus.type && (
+                            <div className={`${styles.statusMessage} ${styles[submitStatus.type]}`}>
+                                {submitStatus.message}
+                            </div>
+                        )}
+                        
+                        <button 
+                            type="submit" 
+                            className="btn btn-primary"
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? 'Sending...' : 'Send Message'}
+                        </button>
                     </form>
                 </div>
 
