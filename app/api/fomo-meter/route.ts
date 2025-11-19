@@ -257,7 +257,10 @@ export async function POST(req: NextRequest) {
       getCurrentPrice(normalizedTicker)
     ]);
 
+    // Only return error if BOTH news and price are unavailable
+    // Having news but no price, or price but no news is acceptable
     if (headlines.length === 0 && priceData.price === 0) {
+      console.error(`Ticker not found: ${normalizedTicker}`);
       return NextResponse.json({
         success: false,
         error: {
@@ -265,6 +268,14 @@ export async function POST(req: NextRequest) {
           message: '找不到这个股票代码或加密货币，试试 AAPL, TSLA, BTC-USD 🤔'
         }
       }, { status: 404 });
+    }
+
+    // Log warnings if one of the data sources failed
+    if (headlines.length === 0) {
+      console.warn(`No news found for ${normalizedTicker}, but price data available`);
+    }
+    if (priceData.price === 0) {
+      console.warn(`No price data for ${normalizedTicker}, but news available`);
     }
 
     // Analyze sentiment with OpenAI

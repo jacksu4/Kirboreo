@@ -129,10 +129,17 @@ export default function LabsPage() {
 
                   {/* Card Footer */}
                   <div className={styles.cardFooter}>
-                    <button className={styles.notifyButton} disabled>
-                      <span>🔔</span>
-                      <span>Notify Me When Ready</span>
-                    </button>
+                    {project.status === 'Live' ? (
+                      <Link href={`/labs/${project.id}`} className={styles.liveButton}>
+                        <span>🚀</span>
+                        <span>Try It Now</span>
+                      </Link>
+                    ) : (
+                      <button className={styles.notifyButton} disabled>
+                        <span>🔔</span>
+                        <span>Notify Me When Ready</span>
+                      </button>
+                    )}
                   </div>
                 </article>
               ))}
