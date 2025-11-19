@@ -65,12 +65,33 @@ async function getNewsFromYahoo(ticker: string): Promise<NewsItem[]> {
     const news = searchResult.news || [];
     console.log(`Found ${news.length} news items`);
 
-    return news.slice(0, 10).map((item: any) => ({
-      title: item.title || '',
-      source: item.publisher || 'Unknown',
-      publishedAt: new Date(item.providerPublishTime * 1000).toISOString(),
-      url: item.link || '',
-    }));
+    return news.slice(0, 10).map((item: any) => {
+      // providerPublishTime is Unix timestamp in seconds
+      const timestamp = item.providerPublishTime || 0;
+      let publishedAt: string;
+      
+      try {
+        // Check if timestamp is in seconds (10 digits) or milliseconds (13 digits)
+        const isSeconds = timestamp.toString().length === 10;
+        const date = new Date(isSeconds ? timestamp * 1000 : timestamp);
+        
+        // Validate the date
+        if (isNaN(date.getTime()) || date.getFullYear() < 2000 || date.getFullYear() > 2100) {
+          publishedAt = new Date().toISOString(); // Fallback to current time
+        } else {
+          publishedAt = date.toISOString();
+        }
+      } catch (error) {
+        publishedAt = new Date().toISOString();
+      }
+      
+      return {
+        title: item.title || '',
+        source: item.publisher || 'Unknown',
+        publishedAt,
+        url: item.link || '',
+      };
+    });
   } catch (error) {
     console.error('Error fetching news from Yahoo:', error);
     return [];
@@ -284,19 +305,44 @@ export async function POST(req: NextRequest) {
     // Analyze sentiment with OpenAI
     const sentiment = await analyzeSentiment(normalizedTicker, headlines);
 
-    // Assign sentiment to each headline (simple keyword matching)
+    // Assign sentiment to each headline with improved keyword matching
     const headlinesWithSentiment = headlines.map(headline => {
       const title = headline.title.toLowerCase();
       let sentiment: 'bullish' | 'neutral' | 'bearish' = 'neutral';
       
-      const positiveWords = ['surge', 'rally', 'record', 'high', 'bullish', 'growth', 'breakthrough', '暴涨', '创新高', '看涨', '突破'];
-      const negativeWords = ['crash', 'plunge', 'crisis', 'fear', 'drop', 'bearish', 'decline', '暴跌', '崩盘', '危机', '下跌', '担忧'];
+      // Expanded keyword lists with weights
+      const strongBullish = ['soar', 'surge', 'rocket', 'skyrocket', 'breakthrough', 'record high', 'all-time high', 'rally', 'boom', '暴涨', '飙升', '突破', '创新高'];
+      const bullish = ['rise', 'gain', 'grow', 'up', 'bullish', 'positive', 'boost', 'upgrade', 'beat', 'outperform', 'strength', '上涨', '看涨', '增长', '利好'];
       
-      if (positiveWords.some(word => title.includes(word))) {
+      const strongBearish = ['crash', 'plunge', 'collapse', 'tank', 'plummet', 'crisis', 'disaster', '崩盘', '暴跌', '危机'];
+      const bearish = ['fall', 'drop', 'decline', 'down', 'bearish', 'negative', 'concern', 'worry', 'miss', 'underperform', 'weakness', 'cut', 'downgrade', '下跌', '看跌', '担忧', '利空'];
+      
+      // Score based approach
+      let score = 0;
+      
+      strongBullish.forEach(word => {
+        if (title.includes(word)) score += 2;
+      });
+      
+      bullish.forEach(word => {
+        if (title.includes(word)) score += 1;
+      });
+      
+      strongBearish.forEach(word => {
+        if (title.includes(word)) score -= 2;
+      });
+      
+      bearish.forEach(word => {
+        if (title.includes(word)) score -= 1;
+      });
+      
+      // Determine sentiment based on score
+      if (score >= 2) {
         sentiment = 'bullish';
-      } else if (negativeWords.some(word => title.includes(word))) {
+      } else if (score <= -2) {
         sentiment = 'bearish';
       }
+      // else remains neutral
       
       return { ...headline, sentiment };
     });
