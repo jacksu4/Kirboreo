@@ -17,8 +17,8 @@ const projects = [
     why_fun: 'Instead of complex charts, it uses emojis and exaggerated animations. When the market is crazy, the page vibrates; during panic, it turns cold-toned.',
     why_useful: 'Acts as a contrarian indicator. When the dashboard is "red-hot," it reminds you to stay calm.',
     example: 'Input $TSLA → System analyzes 10 recent headlines → Shows "😱 Extreme Hype" with rockets flying → Message: "Chill out, even Iron Man needs to sleep."',
-    tech_stack: ['Next.js', 'OpenAI API', 'RSS Feed', 'Vercel'],
-    status: 'Coming Soon',
+    tech_stack: ['Next.js', 'OpenAI API', 'Yahoo Finance', 'Vercel'],
+    status: 'Live',
     gradient: 'linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%)',
   },
   {

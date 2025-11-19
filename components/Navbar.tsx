@@ -32,7 +32,7 @@ export default function Navbar() {
                         
                         {isLabsOpen && (
                             <div className={styles.dropdownMenu}>
-                                <Link href="/labs#fomo-meter" className={styles.dropdownItem}>
+                                <Link href="/labs/fomo-meter" className={styles.dropdownItem}>
                                     <span className={styles.dropdownIcon}>😱</span>
                                     <div>
                                         <div className={styles.dropdownTitle}>FOMO Meter</div>

@@ -1,0 +1,190 @@
+.card {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tickerInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.ticker {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 0.05em;
+}
+
+.priceInfo {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.price {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: white;
+}
+
+.change {
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 8px;
+}
+
+.change.positive {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+}
+
+.change.negative {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.thermometerSection {
+  display: flex;
+  justify-content: center;
+}
+
+.analysisSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.commentaryBox {
+  background: rgba(34, 211, 238, 0.1);
+  border-left: 4px solid #22d3ee;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: start;
+  gap: 1rem;
+}
+
+.commentaryEmoji {
+  font-size: 1.75rem;
+  flex-shrink: 0;
+}
+
+.commentary {
+  font-size: 1.25rem;
+  color: white;
+  font-weight: 600;
+  line-height: 1.6;
+  flex: 1;
+}
+
+.keywordsSection {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.keywordsTitle {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+
+.keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.keyword {
+  background: rgba(147, 51, 234, 0.2);
+  border: 1px solid rgba(147, 51, 234, 0.3);
+  color: #c084fc;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.interpretationBox {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.interpretationTitle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.interpretation {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.7;
+}
+
+.interpretation strong {
+  color: white;
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .thermometerSection {
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 1.5rem;
+  }
+
+  .ticker {
+    font-size: 1.5rem;
+  }
+
+  .price {
+    font-size: 1.5rem;
+  }
+
+  .change {
+    font-size: 1rem;
+  }
+
+  .commentary {
+    font-size: 1.1rem;
+  }
+}
+
