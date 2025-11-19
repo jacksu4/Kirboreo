@@ -1,5 +1,4 @@
 {
-  "regions": ["hkg1", "sin1", "icn1"],
   "functions": {
     "app/api/chat/route.ts": {
       "maxDuration": 60,
