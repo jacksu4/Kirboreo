@@ -13,32 +13,29 @@ describe('ResearchList Component', () => {
     {
       _id: '1',
       title: 'AI Revolution 2024',
-      slug: { current: 'ai-revolution-2024' },
+      slug: 'ai-revolution-2024',
       summary: 'Deep dive into AI trends',
       publishedAt: '2024-01-01',
-      author: { name: 'John Doe' },
-      categories: [{ title: 'AI', slug: { current: 'ai' } }],
+      categories: ['AI', 'Tech'],
     },
     {
       _id: '2',
       title: 'Cloud Computing Future',
-      slug: { current: 'cloud-computing-future' },
+      slug: 'cloud-computing-future',
       summary: 'Analysis of cloud trends',
       publishedAt: '2024-01-02',
-      author: { name: 'Jane Smith' },
-      categories: [{ title: 'Cloud', slug: { current: 'cloud' } }],
+      categories: ['Cloud'],
     },
   ];
 
   it('should render list of posts', () => {
-    render(<ResearchList posts={mockPosts} />);
+    const { container } = render(<ResearchList posts={mockPosts} />);
     // Simple render test
-    expect(document.querySelector('.container')).toBeTruthy();
+    expect(container.querySelector('.container')).toBeTruthy();
   });
 
   it('should render empty state when no posts', () => {
-    render(<ResearchList posts={[]} />);
-    expect(document.querySelector('.container')).toBeTruthy();
+    const { container } = render(<ResearchList posts={[]} />);
+    expect(container.querySelector('.container')).toBeTruthy();
   });
 });
-

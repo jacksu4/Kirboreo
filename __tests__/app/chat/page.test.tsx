@@ -43,7 +43,7 @@ describe('ChatPage', () => {
   it('should render the chat interface', () => {
     render(<ChatPage />);
     
-    expect(screen.getByText(/Kirboreo AI/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Kirboreo AI/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Neural Interface/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Type your message/i)).toBeInTheDocument();
   });
