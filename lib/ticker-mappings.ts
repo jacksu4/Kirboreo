@@ -48,7 +48,7 @@ export const TICKER_MAPPINGS: TickerMapping[] = [
   {
     ticker: 'GOOGL',
     name: 'Google',
-    aliases: ['google', 'alphabet', 'alphabet inc']
+    aliases: ['google', 'alphabet', 'alphabet inc', 'goog']
   },
   {
     ticker: 'AMZN',
@@ -59,6 +59,27 @@ export const TICKER_MAPPINGS: TickerMapping[] = [
     ticker: 'META',
     name: 'Meta',
     aliases: ['meta', 'facebook', 'meta platforms']
+  },
+  // Crypto mappings
+  {
+    ticker: 'BTC-USD',
+    name: 'Bitcoin',
+    aliases: ['btc', 'bitcoin', 'bitcoin usd']
+  },
+  {
+    ticker: 'ETH-USD',
+    name: 'Ethereum',
+    aliases: ['eth', 'ethereum', 'ethereum usd']
+  },
+  {
+    ticker: 'SOL-USD',
+    name: 'Solana',
+    aliases: ['sol', 'solana', 'solana usd']
+  },
+  {
+    ticker: 'DOGE-USD',
+    name: 'Dogecoin',
+    aliases: ['doge', 'dogecoin', 'dogecoin usd']
   }
 ];
 
@@ -69,16 +90,17 @@ export const TICKER_MAPPINGS: TickerMapping[] = [
  */
 export function resolveTickerFromInput(input: string): { ticker: string; companyName?: string; hint?: string } {
   const normalized = input.toLowerCase().trim();
+  const upper = input.toUpperCase().trim();
   
-  // Check if input is already a known ticker
-  const directMatch = TICKER_MAPPINGS.find(m => m.ticker.toLowerCase() === normalized);
+  // Check if input is already a known ticker (case-insensitive)
+  const directMatch = TICKER_MAPPINGS.find(m => m.ticker.toUpperCase() === upper);
   if (directMatch) {
     return { ticker: directMatch.ticker, companyName: directMatch.name };
   }
   
   // Check if input matches any aliases
   const aliasMatch = TICKER_MAPPINGS.find(m => 
-    m.aliases.some(alias => alias === normalized)
+    m.aliases.some(alias => alias.toLowerCase() === normalized)
   );
   if (aliasMatch) {
     return { 
@@ -89,7 +111,7 @@ export function resolveTickerFromInput(input: string): { ticker: string; company
   }
   
   // No match found - return original input (might be a valid ticker we don't know about)
-  return { ticker: input.toUpperCase() };
+  return { ticker: upper };
 }
 
 /**

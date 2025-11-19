@@ -184,32 +184,43 @@ async function analyzeSentiment(ticker: string, headlines: NewsItem[]): Promise<
 
   const headlinesText = headlines.map((h, i) => `${i + 1}. ${h.title}`).join('\n');
 
-  const prompt = `分析以下关于 ${ticker} 的新闻标题，评估市场情绪。
+  const prompt = `你是一位专业的金融分析师。请仔细分析以下关于 ${ticker} 的新闻标题，评估市场情绪。
 
-新闻标题：
+新闻标题（共 ${headlines.length} 条）：
 ${headlinesText}
+
+请按照以下步骤分析：
+
+1. **情绪评分（0-10分）**：
+   - 0-3分：非常看跌（bearish）- 新闻充满负面词汇，如"暴跌"、"崩盘"、"危机"、"抛售"
+   - 4-6分：中性（neutral）- 正负面新闻混合，或者新闻相对平淡
+   - 7-10分：非常看涨（bullish）- 新闻充满正面词汇，如"暴涨"、"突破"、"创新高"、"看好"
+
+2. **转换为百分制（0-100）**：
+   - 将你的0-10分评分 × 10 得到最终分数
+   - 例如：7分 → 70分，3分 → 30分
+
+3. **确定标签和表情**：
+   - 0-19分：极度恐惧 😱
+   - 20-39分：恐惧 😰
+   - 40-69分：中性 😐
+   - 70-89分：贪婪 😏
+   - 90-100分：极度贪婪 🚀
+
+4. **生成犀利点评**（最多50字）：
+   - 如果看涨（70+）：提醒投资者保持冷静，警惕追高风险
+   - 如果看跌（<40）：提醒可能是抄底机会，但需谨慎
+   - 要幽默、讽刺、一针见血
 
 请返回一个 JSON 对象，格式如下：
 {
-  "score": 0-100,
-  "label": "极度恐惧" | "恐惧" | "中性" | "贪婪" | "极度贪婪",
-  "emoji": "😱" | "😰" | "😐" | "😏" | "🚀",
-  "commentary": "一句话犀利点评（最多50字，要幽默讽刺）",
+  "rawScore": 7.5,  // 你的原始0-10评分（可以有小数）
+  "score": 75,  // 转换为百分制（rawScore × 10）
+  "label": "贪婪",
+  "emoji": "😏",
+  "commentary": "一句话犀利点评",
   "keywords": ["关键词1", "关键词2", "关键词3"]
 }
-
-评分标准：
-- 90-100: 新闻全是"突破"、"暴涨"、"革命性"、"历史新高" → 极度贪婪 🚀
-- 70-89: 正面新闻居多，市场乐观 → 贪婪 😏
-- 40-69: 中性，正负面混合 → 中性 😐
-- 20-39: 负面新闻较多，市场担忧 → 恐惧 😰
-- 0-19: 新闻全是"暴跌"、"崩盘"、"危机"、"恐慌" → 极度恐惧 😱
-
-点评要求：
-- 要犀利、幽默、略带讽刺
-- 如果是极度贪婪，提醒冷静，比如"树不会长到天上去"
-- 如果是极度恐惧，鼓励抄底，比如"血流成河时正是买入良机"
-- 最多50个字
 
 只返回 JSON，不要其他内容。`;
 
@@ -217,7 +228,7 @@ ${headlinesText}
     const { text } = await generateText({
       model: openai('gpt-4o'),
       prompt,
-      temperature: 0.8,
+      temperature: 0.7,
     });
 
     console.log('OpenAI response:', text);
@@ -231,7 +242,7 @@ ${headlinesText}
     const result = JSON.parse(jsonMatch[0]);
     
     // Validate and ensure score is within bounds
-    result.score = Math.max(0, Math.min(100, result.score || 50));
+    result.score = Math.max(0, Math.min(100, Math.round(result.score || 50)));
     
     return result;
   } catch (error) {
