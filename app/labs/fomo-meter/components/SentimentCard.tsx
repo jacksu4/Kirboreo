@@ -6,6 +6,7 @@ import styles from './SentimentCard.module.css';
 interface SentimentCardProps {
   data: {
     ticker: string;
+    companyName?: string;
     currentPrice: number;
     priceChange: string;
     sentiment: {
@@ -15,18 +16,27 @@ interface SentimentCardProps {
       commentary: string;
       keywords: string[];
     };
+    hint?: string;
   };
 }
 
 export default function SentimentCard({ data }: SentimentCardProps) {
-  const { ticker, currentPrice, priceChange, sentiment } = data;
+  const { ticker, companyName, currentPrice, priceChange, sentiment, hint } = data;
   const isPositive = priceChange.startsWith('+');
 
   return (
     <div className={styles.card}>
+      {hint && (
+        <div className={styles.hintBanner}>
+          ℹ️ {hint}
+        </div>
+      )}
       <div className={styles.header}>
         <div className={styles.tickerInfo}>
-          <h2 className={styles.ticker}>{ticker}</h2>
+          <h2 className={styles.ticker}>
+            {ticker}
+            {companyName && <span className={styles.companyName}>({companyName})</span>}
+          </h2>
           <div className={styles.priceInfo}>
             <span className={styles.price}>
               ${currentPrice > 0 ? currentPrice.toFixed(2) : 'N/A'}

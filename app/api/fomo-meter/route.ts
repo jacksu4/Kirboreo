@@ -2,6 +2,7 @@ import { openai } from '@ai-sdk/openai';
 import { generateText } from 'ai';
 import { NextRequest, NextResponse } from 'next/server';
 import YahooFinance from 'yahoo-finance2';
+import { resolveTickerFromInput, getCompanyName } from '@/lib/ticker-mappings';
 
 export const maxDuration = 60;
 
@@ -55,17 +56,58 @@ interface NewsItem {
   sentiment?: 'bullish' | 'neutral' | 'bearish';
 }
 
-async function getNewsFromYahoo(ticker: string): Promise<NewsItem[]> {
+/**
+ * Checks if a news headline is relevant to the given ticker
+ * Uses company name matching and filters out generic "path", "coin" mentions
+ */
+function isNewsRelevant(headline: string, ticker: string, companyName?: string): boolean {
+  const titleLower = headline.toLowerCase();
+  const tickerLower = ticker.toLowerCase();
+  
+  // Always include if ticker is explicitly mentioned (with word boundaries)
+  const tickerPattern = new RegExp(`\\b${tickerLower}\\b`, 'i');
+  if (tickerPattern.test(titleLower)) {
+    return true;
+  }
+  
+  // If we have a company name, check if it's mentioned
+  if (companyName) {
+    const companyLower = companyName.toLowerCase();
+    if (titleLower.includes(companyLower)) {
+      return true;
+    }
+  }
+  
+  // Special case: filter out generic "path" mentions if ticker is PATH
+  if (ticker === 'PATH' && companyName) {
+    // Only include if "uipath" is mentioned, exclude generic "path"
+    return titleLower.includes('uipath');
+  }
+  
+  // Special case: filter out generic "coin" mentions if ticker is COIN
+  if (ticker === 'COIN' && companyName) {
+    // Only include if "coinbase" is mentioned, exclude generic "coin" or "bitcoin"
+    return titleLower.includes('coinbase');
+  }
+  
+  // For other tickers, default to false (conservative approach)
+  return false;
+}
+
+async function getNewsFromYahoo(ticker: string, companyName?: string): Promise<NewsItem[]> {
   try {
-    console.log(`Fetching news for ${ticker}`);
+    console.log(`Fetching news for ${ticker}${companyName ? ` (${companyName})` : ''}`);
+    
+    // Try to get news using the ticker first
     const searchResult = await yahooFinance.search(ticker, {
-      newsCount: 15
+      newsCount: 20 // Fetch more to account for filtering
     });
 
     const news = searchResult.news || [];
-    console.log(`Found ${news.length} news items`);
+    console.log(`Found ${news.length} news items (before filtering)`);
 
-    return news.slice(0, 10).map((item: any) => {
+    // Parse all news items first
+    const parsedNews = news.map((item: any) => {
       // providerPublishTime is Unix timestamp in seconds
       const timestamp = item.providerPublishTime || 0;
       let publishedAt: string;
@@ -92,6 +134,16 @@ async function getNewsFromYahoo(ticker: string): Promise<NewsItem[]> {
         url: item.link || '',
       };
     });
+
+    // Filter news for relevance
+    const relevantNews = parsedNews.filter(item => 
+      isNewsRelevant(item.title, ticker, companyName)
+    );
+
+    console.log(`After filtering: ${relevantNews.length} relevant news items`);
+
+    // Return up to 10 relevant items
+    return relevantNews.slice(0, 10);
   } catch (error) {
     console.error('Error fetching news from Yahoo:', error);
     return [];
@@ -263,21 +315,23 @@ export async function POST(req: NextRequest) {
       }, { status: 429 });
     }
 
-    const normalizedTicker = ticker.toUpperCase().replace('$', '');
+    // Resolve ticker from input (handles company names like "UIPath" -> "PATH")
+    const { ticker: resolvedTicker, companyName, hint } = resolveTickerFromInput(ticker);
+    const normalizedTicker = resolvedTicker.toUpperCase().replace('$', '');
 
     // Check cache first
     const cachedData = getCachedData(normalizedTicker);
     if (cachedData) {
       return NextResponse.json({
         success: true,
-        data: cachedData,
+        data: { ...cachedData, hint },
         cached: true
       });
     }
 
     // Fetch news and price in parallel
     const [headlines, priceData] = await Promise.all([
-      getNewsFromYahoo(normalizedTicker),
+      getNewsFromYahoo(normalizedTicker, companyName || getCompanyName(normalizedTicker)),
       getCurrentPrice(normalizedTicker)
     ]);
 
@@ -349,11 +403,13 @@ export async function POST(req: NextRequest) {
 
     const responseData = {
       ticker: normalizedTicker,
+      companyName: companyName || getCompanyName(normalizedTicker),
       currentPrice: priceData.price,
       priceChange: priceData.change > 0 ? `+${priceData.change.toFixed(2)}%` : `${priceData.change.toFixed(2)}%`,
       sentiment,
       headlines: headlinesWithSentiment,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      hint
     };
 
     // Cache the result
