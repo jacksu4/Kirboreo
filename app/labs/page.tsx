@@ -1,122 +1,167 @@
-import ProjectCard from '@/components/ProjectCard';
 import Navbar from '@/components/Navbar';
 import styles from './Labs.module.css';
+import Link from 'next/link';
 
 export const metadata = {
-    title: 'Labs | Kirboreo Experimental Projects',
-    description: 'Explore experimental AI-powered tools for finance and investment analysis.',
+  title: 'Kirboreo Labs | Experimental Projects',
+  description: 'Explore our experimental AI-powered tools for investment research and financial analysis.',
 };
 
 const projects = [
-    {
-        id: 'fomo-meter',
-        icon: '😱',
-        title: 'FOMO Meter',
-        subtitle: '错失恐惧症仪表盘',
-        description: 'A minimalist dashboard that analyzes trending tech news and stocks, presenting market sentiment through a visual "emotion thermometer". Instead of complex candlestick charts, it uses emojis and exaggerated animations to showcase market emotions.',
-        features: [
-            '🌡️ Real-time market sentiment visualization',
-            '📰 AI-powered news analysis',
-            '🎨 Dynamic UI that reacts to market emotions (vibrations during hype, cool tones during panic)',
-            '⚖️ Acts as a contrarian indicator - reminds you to stay calm when the meter turns "red-hot"',
-        ],
-        techStack: ['Next.js', 'OpenAI API', 'RSS Feed', 'Vercel'],
-        example: {
-            input: '$TSLA',
-            output: '😱 Extreme Hype (极度炒作)\n🚀 Background: Rockets flying everywhere\n💬 "Chill out, even Iron Man needs to sleep."\n\n10 latest headlines all shouting "Robotaxi will change the world!"',
-        },
-        status: 'coming-soon' as const,
-    },
-    {
-        id: 'stoic-mirror',
-        icon: '🪞',
-        title: 'Stoic Mirror',
-        subtitle: '赛博斯多葛之镜',
-        description: 'An AI-driven reflection journal that combines meditation and philosophical wisdom. Share your anxieties, and AI responds in the voice of ancient philosophers like Marcus Aurelius or Wang Yangming, providing higher-dimensional perspectives.',
-        features: [
-            '🧘 Mindful trading psychology support',
-            '📜 Ancient wisdom meets modern AI',
-            '✍️ Beautiful UI with breathing text animations (zen or parchment style)',
-            '💭 Helps calm trading-day anxiety with philosophical perspective',
-        ],
-        techStack: ['React', 'Tailwind CSS', 'Vercel AI SDK', 'Streaming Text'],
-        example: {
-            input: 'Today my portfolio dropped 2%, I feel anxious and like a failure.',
-            output: '此心不动，随机而动。\n涨跌皆是外物，内心的焦虑源于对未知的恐惧，而非亏损本身。\n你且看那山中花开花落，何曾为了谁而改变？\n\n(This mind does not move, yet moves with circumstances.\nGains and losses are external—your anxiety stems from fear of the unknown, not the loss itself.\nObserve how mountain flowers bloom and fall—do they change for anyone?)',
-        },
-        status: 'coming-soon' as const,
-    },
-    {
-        id: 'eli5-generator',
-        icon: '🍎',
-        title: 'ELI5 Generator',
-        subtitle: '五岁小孩解释器',
-        description: 'Input complex financial terms or company earnings reports (e.g., NVIDIA\'s CUDA architecture), and instantly generate an explanation using only emojis and plain language. Perfect for social media sharing as visual meme cards.',
-        features: [
-            '🧒 Feynman learning technique - clarify your own thinking',
-            '🎨 One-click shareable image generation',
-            '😂 Contrast humor (反差萌) - boring finance becomes viral memes',
-            '📚 Great for investor education content',
-        ],
-        techStack: ['Next.js', 'Vercel OG (Image Generation)', 'OpenAI API'],
-        example: {
-            input: 'Short Selling (做空)',
-            output: '🍎 借苹果的故事\n\n1️⃣ 你找邻居借了一个苹果 (Borrow)\n2️⃣ 你立刻把苹果卖了换 5 块钱 (Sell)\n3️⃣ 你赌苹果明天会降价\n4️⃣ 明天苹果真的只要 2 块钱了！\n5️⃣ 你买个新苹果还给邻居 (Cover)\n\n💰 你赚了 3 块钱！\n\n(但如果苹果涨到 10 块，你就完蛋了 💀)',
-        },
-        status: 'coming-soon' as const,
-    },
+  {
+    id: 'fomo-meter',
+    emoji: '😱',
+    title: 'The "FOMO" Meter',
+    subtitle: '错失恐惧症仪表盘',
+    description: 'A minimalist dashboard that analyzes trending tech news and stocks, presenting a visual "emotion thermometer" to gauge market sentiment.',
+    why_fun: 'Instead of complex charts, it uses emojis and exaggerated animations. When the market is crazy, the page vibrates; during panic, it turns cold-toned.',
+    why_useful: 'Acts as a contrarian indicator. When the dashboard is "red-hot," it reminds you to stay calm.',
+    example: 'Input $TSLA → System analyzes 10 recent headlines → Shows "😱 Extreme Hype" with rockets flying → Message: "Chill out, even Iron Man needs to sleep."',
+    tech_stack: ['Next.js', 'OpenAI API', 'RSS Feed', 'Vercel'],
+    status: 'Coming Soon',
+    gradient: 'linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%)',
+  },
+  {
+    id: 'stoic-mirror',
+    emoji: '🪞',
+    title: 'The Digital "Stoic" Mirror',
+    subtitle: '赛博斯多葛之镜',
+    description: 'An AI-driven journaling companion that combines meditation and reflection. Share your anxieties and receive wisdom from ancient philosophers like Marcus Aurelius or Wang Yangming.',
+    why_fun: 'This "cross-time dialogue" has a unique vibe. The interface resembles ancient parchment or minimalist Zen style.',
+    why_useful: 'Helps calm trading-day anxieties and provides higher-dimensional perspective.',
+    example: 'Input: "My portfolio dropped 2% today, I feel like a failure." → Response (Wang Yangming style): "This heart unmoved, moves with opportunity. Gains and losses are external, inner anxiety stems from fear of the unknown, not the loss itself."',
+    tech_stack: ['React', 'Tailwind CSS', 'Vercel AI SDK', 'Streaming Text'],
+    status: 'Coming Soon',
+    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  },
+  {
+    id: 'eli5-generator',
+    emoji: '🍎',
+    title: '"Explain Like I\'m 5" Generator',
+    subtitle: '五岁小孩解释器 - 基金版',
+    description: 'Input complex financial terms or company reports (like NVIDIA\'s CUDA architecture), and get simple explanations using only emojis and plain language, shareable as image cards.',
+    why_fun: 'This contrast is perfect for social media. Turns boring finance into memes.',
+    why_useful: 'Helps clarify your thinking (Feynman technique) and creates educational content for clients.',
+    example: 'Input: "Short Selling" → Generates card with apple story: Borrow 🍎 → Sell for $5 → Price drops to $2 → Buy new 🍎 → Return to neighbor → 💰 Profit $3! (But if price rises to $10, you\'re done 💀)',
+    tech_stack: ['Next.js', 'Vercel/OG', 'OpenAI API', 'Image Generation'],
+    status: 'Coming Soon',
+    gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+  },
 ];
 
 export default function LabsPage() {
-    return (
-        <div className={styles.container}>
-            <Navbar />
+  return (
+    <div className={styles.page}>
+      <Navbar />
+      
+      <main className={styles.main}>
+        {/* Hero Section */}
+        <section className={styles.hero}>
+          <div className="container">
+            <div className={styles.heroContent}>
+              <h1 className={styles.heroTitle}>
+                <span className={styles.labs}>Kirboreo</span>
+                <span className={styles.emoji}>🧪</span>
+                <span className={styles.labs}>Labs</span>
+              </h1>
+              <p className={styles.heroSubtitle}>
+                Experimental AI-Powered Tools for Modern Investors
+              </p>
+              <p className={styles.heroDescription}>
+                Where serious finance meets playful innovation. Explore our collection of experimental projects 
+                that make investment research more intuitive, engaging, and surprisingly fun.
+              </p>
+            </div>
+          </div>
+        </section>
 
-            {/* Hero Section */}
-            <section className={styles.hero}>
-                <div className={styles.heroContent}>
-                    <h1 className={styles.heroTitle}>
-                        Kirboreo <span className={styles.labsText}>Labs</span> 🧪
-                    </h1>
-                    <p className={styles.heroSubtitle}>
-                        Experimental AI-Powered Tools for Finance & Investment
-                    </p>
-                    <p className={styles.heroDescription}>
-                        Where curiosity meets innovation. These are our playground projects—
-                        <strong> fun, useful, and surprisingly delightful</strong>. Each experiment 
-                        blends cutting-edge AI with practical financial insights, wrapped in a user experience 
-                        that makes complex concepts accessible and engaging.
-                    </p>
-                </div>
+        {/* Projects Grid */}
+        <section className={styles.projectsSection}>
+          <div className="container">
+            <div className={styles.projectsGrid}>
+              {projects.map((project) => (
+                <article 
+                  key={project.id} 
+                  id={project.id}
+                  className={styles.projectCard}
+                  style={{ ['--card-gradient' as string]: project.gradient }}
+                >
+                  {/* Card Header */}
+                  <div className={styles.cardHeader}>
+                    <div className={styles.cardEmoji}>{project.emoji}</div>
+                    <div className={styles.cardTitleGroup}>
+                      <h2 className={styles.cardTitle}>{project.title}</h2>
+                      <p className={styles.cardSubtitle}>{project.subtitle}</p>
+                    </div>
+                    <span className={styles.statusBadge}>{project.status}</span>
+                  </div>
 
-                {/* Floating background elements */}
-                <div className={styles.bgGradient1}></div>
-                <div className={styles.bgGradient2}></div>
-            </section>
+                  {/* Card Content */}
+                  <div className={styles.cardContent}>
+                    <p className={styles.description}>{project.description}</p>
 
-            {/* Projects Section */}
-            <section className={styles.projects}>
-                <div className="container">
-                    {projects.map((project) => (
-                        <ProjectCard key={project.id} {...project} />
-                    ))}
-                </div>
-            </section>
+                    <div className={styles.section}>
+                      <h3 className={styles.sectionTitle}>🎨 Why It's Fun</h3>
+                      <p className={styles.sectionText}>{project.why_fun}</p>
+                    </div>
 
-            {/* Footer CTA */}
-            <section className={styles.cta}>
-                <div className={styles.ctaContent}>
-                    <h2 className={styles.ctaTitle}>Have an Idea?</h2>
-                    <p className={styles.ctaDescription}>
-                        We're always experimenting with new concepts. If you have feedback or suggestions, 
-                        we'd love to hear from you.
-                    </p>
-                    <a href="/about#contact" className={styles.ctaButton}>
-                        💬 Share Your Thoughts
-                    </a>
-                </div>
-            </section>
-        </div>
-    );
+                    <div className={styles.section}>
+                      <h3 className={styles.sectionTitle}>💡 Why It's Useful</h3>
+                      <p className={styles.sectionText}>{project.why_useful}</p>
+                    </div>
+
+                    <div className={styles.section}>
+                      <h3 className={styles.sectionTitle}>📖 Example Scenario</h3>
+                      <div className={styles.exampleBox}>
+                        <p className={styles.exampleText}>{project.example}</p>
+                      </div>
+                    </div>
+
+                    <div className={styles.section}>
+                      <h3 className={styles.sectionTitle}>🛠️ Tech Stack</h3>
+                      <div className={styles.techStack}>
+                        {project.tech_stack.map((tech) => (
+                          <span key={tech} className={styles.techTag}>{tech}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card Footer */}
+                  <div className={styles.cardFooter}>
+                    <button className={styles.notifyButton} disabled>
+                      <span>🔔</span>
+                      <span>Notify Me When Ready</span>
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className={styles.ctaSection}>
+          <div className="container">
+            <div className={styles.ctaContent}>
+              <h2 className={styles.ctaTitle}>Have an Idea for a Lab Project?</h2>
+              <p className={styles.ctaText}>
+                We're always looking for innovative ways to make investment research more accessible and engaging.
+              </p>
+              <Link href="/about#contact" className={styles.ctaButton}>
+                Share Your Thoughts
+              </Link>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* Background Effects */}
+      <div className={styles.backgroundEffects}>
+        <div className={styles.glow1} />
+        <div className={styles.glow2} />
+        <div className={styles.glow3} />
+      </div>
+    </div>
+  );
 }
-
