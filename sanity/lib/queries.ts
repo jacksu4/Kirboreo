@@ -11,6 +11,15 @@ export const POSTS_QUERY = groq`*[_type == "post"] | order(publishedAt desc) {
   summary
 }`;
 
+export const HOME_LATEST_POSTS_QUERY = groq`*[_type == "post"] | order(publishedAt desc)[0...3] {
+  _id,
+  title,
+  "slug": slug.current,
+  publishedAt,
+  "categories": categories[]->title,
+  summary
+}`;
+
 export const STOCKS_LIST_QUERY = groq`*[_type == "stockAnalysis"] | order(ticker asc) {
   ticker,
   companyName,

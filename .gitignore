@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+*.test.js.snap
+/.nyc_output
 
 # next.js
 /.next/

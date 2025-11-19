@@ -228,8 +228,8 @@ export default function StockAnalysis({ stockData, relatedPosts }: StockAnalysis
                     </div>
                 ) : (
                     <div className={styles.emptyState}>
-                        <p className={styles.emptyStateText}>暂无相关分析文章</p>
-                        <p className={styles.emptyStateSubtext}>我们会持续为您带来关于 {stockData.companyName} 的深度分析</p>
+                        <p className={styles.emptyStateText}>No related analysis available</p>
+                        <p className={styles.emptyStateSubtext}>We'll continue to bring you in-depth analysis on {stockData.companyName}</p>
                     </div>
                 )}
             </div>

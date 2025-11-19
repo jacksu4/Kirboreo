@@ -28,6 +28,170 @@
     margin-bottom: var(--spacing-md);
 }
 
+/* Founder Section */
+.founderSection {
+    margin: var(--spacing-xl) 0;
+    padding: var(--spacing-xl) 0;
+}
+
+.founderCard {
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.05), rgba(124, 58, 237, 0.05));
+    border: 1px solid rgba(34, 211, 238, 0.2);
+    border-radius: 16px;
+    padding: var(--spacing-xl);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.founderHeader {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.founderAvatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #06b6d4, #7c3aed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(34, 211, 238, 0.3);
+}
+
+.founderTitle h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    background: linear-gradient(to right, #22d3ee, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.role {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 0.25rem 0;
+    font-weight: 500;
+}
+
+.credentials {
+    font-size: 0.9rem;
+    color: rgba(34, 211, 238, 0.8);
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.founderBio {
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.founderBio p {
+    margin-bottom: var(--spacing-md);
+    font-size: 1.05rem;
+}
+
+.tagline {
+    font-size: 1.2rem !important;
+    text-align: center;
+    padding: var(--spacing-md);
+    background: rgba(34, 211, 238, 0.1);
+    border-left: 4px solid #22d3ee;
+    border-radius: 8px;
+    margin-bottom: var(--spacing-lg) !important;
+}
+
+.alphaEdge,
+.mission,
+.philosophy {
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-lg);
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.alphaEdge h3,
+.mission h3 {
+    font-size: 1.3rem;
+    color: #22d3ee;
+    margin: 0 0 var(--spacing-md) 0;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.alphaEdge h3::before {
+    content: '⚡';
+    font-size: 1.5rem;
+}
+
+.mission h3::before {
+    content: '🎯';
+    font-size: 1.5rem;
+}
+
+.alphaEdge ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.alphaEdge li {
+    margin-bottom: var(--spacing-md);
+    padding-left: var(--spacing-lg);
+    position: relative;
+}
+
+.alphaEdge li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: #c084fc;
+    font-size: 1.2rem;
+}
+
+.alphaEdge li strong {
+    color: #c084fc;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.philosophy {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(6, 182, 212, 0.1));
+    border: 1px solid rgba(192, 132, 252, 0.2);
+}
+
+.philosophy blockquote {
+    margin: 0;
+    padding: 0;
+    font-size: 1.15rem;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.8;
+    position: relative;
+}
+
+.philosophy blockquote::before {
+    content: '"';
+    font-size: 3rem;
+    color: rgba(192, 132, 252, 0.3);
+    position: absolute;
+    top: -10px;
+    left: -10px;
+}
+
 .contactSection {
     display: grid;
     gap: var(--spacing-xl);
