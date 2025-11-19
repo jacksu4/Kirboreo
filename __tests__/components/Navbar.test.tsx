@@ -10,7 +10,9 @@ describe('Navbar Component', () => {
   it('should render the logo/brand name', () => {
     render(<Navbar />);
     
-    expect(screen.getByText(/Kirboreo/i)).toBeInTheDocument();
+    // Logo is split into two spans: "Kir" and "boreo"
+    expect(screen.getByText('Kir')).toBeInTheDocument();
+    expect(screen.getByText('boreo')).toBeInTheDocument();
   });
 
   it('should render navigation links', () => {

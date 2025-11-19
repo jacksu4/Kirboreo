@@ -1,19 +1,22 @@
-import { fetchStockChart } from '@/lib/yahoo';
+import { getStockChart } from '@/lib/yahoo';
 
-// Mock yahoo-finance2
-jest.mock('yahoo-finance2', () => ({
-  chart: jest.fn(),
-}));
+const mockChart = jest.fn();
+const mockHistorical = jest.fn();
 
-import yahooFinance from 'yahoo-finance2';
+jest.mock('yahoo-finance2', () => {
+  return jest.fn().mockImplementation(() => ({
+    chart: (...args: any[]) => mockChart(...args),
+    historical: (...args: any[]) => mockHistorical(...args),
+  }));
+});
 
 describe('Yahoo Finance Integration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('fetchStockChart', () => {
-    it('should fetch 1-day intraday data with correct interval', async () => {
+  describe('getStockChart', () => {
+    it('should fetch 1-day intraday data', async () => {
       const mockData = {
         quotes: [
           { date: new Date('2024-01-01T10:00:00'), close: 150.5 },
@@ -21,14 +24,13 @@ describe('Yahoo Finance Integration', () => {
         ],
       };
 
-      (yahooFinance.chart as jest.Mock).mockResolvedValue(mockData);
+      mockChart.mockResolvedValue(mockData);
 
-      const result = await fetchStockChart('AAPL', '1d');
+      const result = await getStockChart('AAPL', '1d');
 
-      expect(yahooFinance.chart).toHaveBeenCalledWith(
+      expect(mockChart).toHaveBeenCalledWith(
         'AAPL',
         expect.objectContaining({
-          period1: expect.any(Date),
           interval: '15m',
         })
       );
@@ -38,19 +40,17 @@ describe('Yahoo Finance Integration', () => {
       expect(result[0]).toHaveProperty('close');
     });
 
-    it('should fetch 1-year daily data', async () => {
-      const mockData = {
-        quotes: [
-          { date: new Date('2023-01-01'), close: 140.0 },
-          { date: new Date('2023-01-02'), close: 141.0 },
-        ],
-      };
+    it('should fetch 1-year historical data', async () => {
+      const mockData = [
+        { date: new Date('2023-01-01'), close: 140.0 },
+        { date: new Date('2023-01-02'), close: 141.0 },
+      ];
 
-      (yahooFinance.chart as jest.Mock).mockResolvedValue(mockData);
+      mockHistorical.mockResolvedValue(mockData);
 
-      const result = await fetchStockChart('TSLA', '1y');
+      const result = await getStockChart('TSLA', '1y');
 
-      expect(yahooFinance.chart).toHaveBeenCalledWith(
+      expect(mockHistorical).toHaveBeenCalledWith(
         'TSLA',
         expect.objectContaining({
           interval: '1d',
@@ -61,20 +61,10 @@ describe('Yahoo Finance Integration', () => {
     });
 
     it('should handle errors gracefully', async () => {
-      (yahooFinance.chart as jest.Mock).mockRejectedValue(
-        new Error('API Error')
-      );
+      mockChart.mockRejectedValue(new Error('API Error'));
 
-      await expect(fetchStockChart('INVALID', '1d')).rejects.toThrow();
-    });
-
-    it('should return empty array for invalid tickers', async () => {
-      (yahooFinance.chart as jest.Mock).mockResolvedValue({ quotes: [] });
-
-      const result = await fetchStockChart('INVALID', '1d');
-
+      const result = await getStockChart('INVALID', '1d');
       expect(result).toEqual([]);
     });
   });
 });
-

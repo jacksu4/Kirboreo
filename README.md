@@ -183,6 +183,13 @@ Test structure:
 
 ## 🚢 Deployment
 
+### Vercel Configuration Note (React 19)
+This project uses React 19. To avoid peer dependency conflicts during Vercel deployment (specifically with legacy packages like `react-tilt`), we use a custom `.npmrc` configuration:
+```ini
+legacy-peer-deps=true
+```
+This is already configured in the repository.
+
 ### Deploy to Vercel (Recommended)
 
 1. **Push to GitHub**:
