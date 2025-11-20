@@ -9,7 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Comprehensive test suite with Jest and React Testing Library (20 test suites, 146 tests)
-- Vercel deployment configuration with Hong Kong region optimization
 - Docker support with Dockerfile and .dockerignore
 - Environment variable template and documentation
 - Contact form with Resend email integration
@@ -17,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Smart ticker resolution (company name → ticker symbol mapping)
 - News relevance filtering for ambiguous tickers (PATH, COIN, etc.)
 - Rate limiting and caching for FOMO Meter API
+- AI Lab external link in Labs dropdown menu
+- Two-tier news filtering strategy (strict + relaxed) ensuring 10+ articles
 
 ### Changed
 - Converted all Chinese comments to English across codebase
@@ -24,12 +25,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Consolidated 11 separate MD files into comprehensive README and CHANGELOG
 - Improved documentation structure and readability
 - Optimized project organization and file structure
+- Increased FOMO Meter news fetch from 20 to 50 articles
+- Chat API uses Node.js runtime (Pinecone compatibility)
 
 ### Fixed
 - FOMO Meter news filtering to show only ticker-relevant headlines
 - Ticker resolution to support company names (e.g., "UIPath" → "PATH")
 - Background3D component React 19 compatibility
 - Test coverage for all core components and utilities
+- Vercel deployment configuration for Node.js runtime compatibility
+- BTC price display and GOOG news fetching issues
+- GPT sentiment scoring now uses 0-10 raw score converted to 0-100 scale
 
 ### Removed
 - Debug scripts (debug-yahoo.js, debug-yahoo-intraday.js)
@@ -37,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reference documents: CHANGES_SUMMARY.md, CLEANUP_SUMMARY.md, CONTACT_FORM_SETUP.md
 - Redundant documentation files: CONTRIBUTING.md, DEPLOYMENT_GUIDE.md, PROJECT_STATUS.md
 - FOMO Meter documentation files (consolidated into README)
+- Edge runtime configuration from vercel.json (incompatible with Pinecone)
 
 ## [1.0.0] - 2024-11-19
 
