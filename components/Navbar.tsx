@@ -40,6 +40,19 @@ export default function Navbar() {
                                     </div>
                                 </Link>
                                 
+                                <a 
+                                    href="https://ai-lab-green.vercel.app/" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className={styles.dropdownItem}
+                                >
+                                    <span className={styles.dropdownIcon}>🤖</span>
+                                    <div>
+                                        <div className={styles.dropdownTitle}>AI Lab</div>
+                                        <div className={styles.dropdownDesc}>Experimental AI playground</div>
+                                    </div>
+                                </a>
+                                
                                 <Link href="/labs#stoic-mirror" className={styles.dropdownItem}>
                                     <span className={styles.dropdownIcon}>🪞</span>
                                     <div>

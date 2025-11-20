@@ -2,6 +2,7 @@ import { openai } from '@ai-sdk/openai';
 import { streamText, embed } from 'ai';
 import { Pinecone } from '@pinecone-database/pinecone';
 
+export const runtime = 'edge';
 export const maxDuration = 60;
 
 /**

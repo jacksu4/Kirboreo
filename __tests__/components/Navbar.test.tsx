@@ -92,7 +92,7 @@ describe('Navbar Component', () => {
       }
     });
 
-    it('should render all three dropdown items when open', async () => {
+    it('should render all four dropdown items when open', async () => {
       const labsLink = screen.getByRole('link', { name: /Labs 🧪/i });
       const dropdownContainer = labsLink.closest('[class*="dropdown"]');
 
@@ -102,11 +102,13 @@ describe('Navbar Component', () => {
         await waitFor(() => {
           // Check titles
           expect(screen.getByText('FOMO Meter')).toBeInTheDocument();
+          expect(screen.getByText('AI Lab')).toBeInTheDocument();
           expect(screen.getByText('Stoic Mirror')).toBeInTheDocument();
           expect(screen.getByText('ELI5 Generator')).toBeInTheDocument();
 
           // Check descriptions
           expect(screen.getByText('Market sentiment visualizer')).toBeInTheDocument();
+          expect(screen.getByText('Experimental AI playground')).toBeInTheDocument();
           expect(screen.getByText('AI-powered reflection companion')).toBeInTheDocument();
           expect(screen.getByText('Complex finance made simple')).toBeInTheDocument();
         });
@@ -122,10 +124,14 @@ describe('Navbar Component', () => {
 
         await waitFor(() => {
           const fomoLink = screen.getByText('FOMO Meter').closest('a');
+          const aiLabLink = screen.getByText('AI Lab').closest('a');
           const stoicLink = screen.getByText('Stoic Mirror').closest('a');
           const eli5Link = screen.getByText('ELI5 Generator').closest('a');
 
           expect(fomoLink).toHaveAttribute('href', '/labs/fomo-meter');
+          expect(aiLabLink).toHaveAttribute('href', 'https://ai-lab-green.vercel.app/');
+          expect(aiLabLink).toHaveAttribute('target', '_blank');
+          expect(aiLabLink).toHaveAttribute('rel', 'noopener noreferrer');
           expect(stoicLink).toHaveAttribute('href', '/labs#stoic-mirror');
           expect(eli5Link).toHaveAttribute('href', '/labs#eli5-generator');
         });
@@ -141,6 +147,7 @@ describe('Navbar Component', () => {
 
         await waitFor(() => {
           expect(screen.getByText('😱')).toBeInTheDocument();
+          expect(screen.getByText('🤖')).toBeInTheDocument();
           expect(screen.getByText('🪞')).toBeInTheDocument();
           expect(screen.getByText('🍎')).toBeInTheDocument();
         });
