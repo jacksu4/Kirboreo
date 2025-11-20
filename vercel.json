@@ -2,7 +2,16 @@
   "functions": {
     "app/api/chat/route.ts": {
       "maxDuration": 60,
-      "memory": 1024
+      "memory": 1024,
+      "regions": [
+        "hkg1",
+        "sfo1",
+        "iad1",
+        "dub1",
+        "sin1",
+        "syd1"
+      ],
+      "runtime": "edge"
     }
   },
   "headers": [
@@ -25,4 +34,3 @@
     }
   ]
 }
-
