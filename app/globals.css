@@ -1,26 +1,33 @@
+@import "tailwindcss";
+
 :root {
   /* Core Colors */
-  --background: #050A14; /* Deep Space Blue/Black */
+  --background: #050A14;
+  /* Deep Space Blue/Black */
   --foreground: #FFFFFF;
-  
+
   /* Brand Colors */
-  --primary: #FF6EC7; /* Neon Pink (Kirby) */
-  --secondary: #F0F0F0; /* Oreo Cream */
-  --accent: #00F0FF; /* Electric Blue (Tech) */
-  --surface: #0F1623; /* Slightly lighter background for cards */
+  --primary: #FF6EC7;
+  /* Neon Pink (Kirby) */
+  --secondary: #F0F0F0;
+  /* Oreo Cream */
+  --accent: #00F0FF;
+  /* Electric Blue (Tech) */
+  --surface: #0F1623;
+  /* Slightly lighter background for cards */
   --surface-hover: #1A2436;
-  
+
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, var(--primary), var(--accent));
   --gradient-dark: linear-gradient(to bottom, var(--background), var(--surface));
-  
+
   /* Spacing */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
   --spacing-lg: 2rem;
   --spacing-xl: 4rem;
-  
+
   /* Border Radius */
   --radius-sm: 0.5rem;
   --radius-md: 1rem;

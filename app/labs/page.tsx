@@ -31,7 +31,7 @@ const projects = [
     why_useful: 'Helps calm trading-day anxieties and provides higher-dimensional perspective.',
     example: 'Input: "My portfolio dropped 2% today, I feel like a failure." → Response (Wang Yangming style): "This heart unmoved, moves with opportunity. Gains and losses are external, inner anxiety stems from fear of the unknown, not the loss itself."',
     tech_stack: ['React', 'Tailwind CSS', 'Vercel AI SDK', 'Streaming Text'],
-    status: 'Coming Soon',
+    status: 'Live',
     gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
   },
   {
@@ -44,7 +44,7 @@ const projects = [
     why_useful: 'Helps clarify your thinking (Feynman technique) and creates educational content for clients.',
     example: 'Input: "Short Selling" → Generates card with apple story: Borrow 🍎 → Sell for $5 → Price drops to $2 → Buy new 🍎 → Return to neighbor → 💰 Profit $3! (But if price rises to $10, you\'re done 💀)',
     tech_stack: ['Next.js', 'Vercel/OG', 'OpenAI API', 'Image Generation'],
-    status: 'Coming Soon',
+    status: 'Live',
     gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
   },
 ];
@@ -53,7 +53,7 @@ export default function LabsPage() {
   return (
     <div className={styles.page}>
       <Navbar />
-      
+
       <main className={styles.main}>
         {/* Hero Section */}
         <section className={styles.hero}>
@@ -68,7 +68,7 @@ export default function LabsPage() {
                 Experimental AI-Powered Tools for Modern Investors
               </p>
               <p className={styles.heroDescription}>
-                Where serious finance meets playful innovation. Explore our collection of experimental projects 
+                Where serious finance meets playful innovation. Explore our collection of experimental projects
                 that make investment research more intuitive, engaging, and surprisingly fun.
               </p>
             </div>
@@ -80,8 +80,8 @@ export default function LabsPage() {
           <div className="container">
             <div className={styles.projectsGrid}>
               {projects.map((project) => (
-                <article 
-                  key={project.id} 
+                <article
+                  key={project.id}
                   id={project.id}
                   className={styles.projectCard}
                   style={{ ['--card-gradient' as string]: project.gradient }}
