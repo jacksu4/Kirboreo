@@ -59,10 +59,10 @@ describe('Navbar Component', () => {
     it('should show dropdown menu on mouse enter', async () => {
       const labsLink = screen.getByRole('link', { name: /Labs 🧪/i });
       const dropdownContainer = labsLink.closest('[class*="dropdown"]');
-      
+
       if (dropdownContainer) {
         fireEvent.mouseEnter(dropdownContainer);
-        
+
         await waitFor(() => {
           expect(screen.getByText('FOMO Meter')).toBeInTheDocument();
           expect(screen.getByText('Stoic Mirror')).toBeInTheDocument();
@@ -74,18 +74,18 @@ describe('Navbar Component', () => {
     it('should hide dropdown menu on mouse leave', async () => {
       const labsLink = screen.getByRole('link', { name: /Labs 🧪/i });
       const dropdownContainer = labsLink.closest('[class*="dropdown"]');
-      
+
       if (dropdownContainer) {
         // Show dropdown
         fireEvent.mouseEnter(dropdownContainer);
-        
+
         await waitFor(() => {
           expect(screen.getByText('FOMO Meter')).toBeInTheDocument();
         });
 
         // Hide dropdown
         fireEvent.mouseLeave(dropdownContainer);
-        
+
         await waitFor(() => {
           expect(screen.queryByText('Market sentiment visualizer')).not.toBeInTheDocument();
         });
@@ -95,10 +95,10 @@ describe('Navbar Component', () => {
     it('should render all three dropdown items when open', async () => {
       const labsLink = screen.getByRole('link', { name: /Labs 🧪/i });
       const dropdownContainer = labsLink.closest('[class*="dropdown"]');
-      
+
       if (dropdownContainer) {
         fireEvent.mouseEnter(dropdownContainer);
-        
+
         await waitFor(() => {
           // Check titles
           expect(screen.getByText('FOMO Meter')).toBeInTheDocument();
@@ -116,16 +116,16 @@ describe('Navbar Component', () => {
     it('should have correct anchor links for dropdown items', async () => {
       const labsLink = screen.getByRole('link', { name: /Labs 🧪/i });
       const dropdownContainer = labsLink.closest('[class*="dropdown"]');
-      
+
       if (dropdownContainer) {
         fireEvent.mouseEnter(dropdownContainer);
-        
+
         await waitFor(() => {
           const fomoLink = screen.getByText('FOMO Meter').closest('a');
           const stoicLink = screen.getByText('Stoic Mirror').closest('a');
           const eli5Link = screen.getByText('ELI5 Generator').closest('a');
 
-          expect(fomoLink).toHaveAttribute('href', '/labs#fomo-meter');
+          expect(fomoLink).toHaveAttribute('href', '/labs/fomo-meter');
           expect(stoicLink).toHaveAttribute('href', '/labs#stoic-mirror');
           expect(eli5Link).toHaveAttribute('href', '/labs#eli5-generator');
         });
@@ -135,10 +135,10 @@ describe('Navbar Component', () => {
     it('should render dropdown item emojis', async () => {
       const labsLink = screen.getByRole('link', { name: /Labs 🧪/i });
       const dropdownContainer = labsLink.closest('[class*="dropdown"]');
-      
+
       if (dropdownContainer) {
         fireEvent.mouseEnter(dropdownContainer);
-        
+
         await waitFor(() => {
           expect(screen.getByText('😱')).toBeInTheDocument();
           expect(screen.getByText('🪞')).toBeInTheDocument();
@@ -182,7 +182,7 @@ describe('Navbar Component', () => {
       const labsLinks = screen.getAllByRole('link', { name: /Labs 🧪/i });
       const labsLink = labsLinks[0]; // Get the first one
       const dropdownContainer = labsLink.closest('[class*="dropdown"]');
-      
+
       if (dropdownContainer) {
         // Initial state - closed
         expect(screen.queryByText('Market sentiment visualizer')).not.toBeInTheDocument();

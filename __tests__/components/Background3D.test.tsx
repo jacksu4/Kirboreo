@@ -28,6 +28,8 @@ jest.mock('three', () => ({
   AdditiveBlending: 2,
   Points: jest.fn(),
   Float32Array: global.Float32Array,
+  Group: jest.fn(),
+  Mesh: jest.fn(),
 }));
 
 describe('Background3D Component', () => {
@@ -43,4 +45,10 @@ describe('Background3D Component', () => {
     expect(bgDiv).toHaveClass('fixed');
     expect(bgDiv).toHaveClass('inset-0');
   });
+
+  it('should render Stars component', () => {
+    const { container } = render(<Background3D />);
+    expect(container.querySelector('[data-testid="stars"]')).toBeTruthy();
+  });
 });
+

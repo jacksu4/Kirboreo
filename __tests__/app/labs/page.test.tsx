@@ -62,15 +62,15 @@ describe('LabsPage', () => {
       expect(nextJsTags.length).toBeGreaterThanOrEqual(1);
       const openAITags = screen.getAllByText('OpenAI API');
       expect(openAITags.length).toBeGreaterThanOrEqual(1);
-      expect(screen.getByText('RSS Feed')).toBeInTheDocument();
+      expect(screen.getByText('Yahoo Finance')).toBeInTheDocument();
     });
 
     it('should render example scenario', () => {
       expect(screen.getByText(/Input \$TSLA/i)).toBeInTheDocument();
     });
 
-    it('should display Coming Soon status', () => {
-      const statusBadges = screen.getAllByText('Coming Soon');
+    it('should display Live status', () => {
+      const statusBadges = screen.getAllByText('Live');
       expect(statusBadges.length).toBe(3); // One for each project
     });
   });
@@ -151,12 +151,23 @@ describe('LabsPage', () => {
       expect(techSections.length).toBe(3);
     });
 
-    it('should render disabled notify buttons', () => {
-      const notifyButtons = screen.getAllByRole('button', { name: /Notify Me When Ready/i });
-      expect(notifyButtons.length).toBe(3);
-      notifyButtons.forEach(button => {
-        expect(button).toBeDisabled();
-      });
+    it('should render live status badge for all projects', () => {
+      const statusBadges = screen.getAllByText('Live');
+      expect(statusBadges.length).toBe(3); // All projects are live
+    });
+
+    it('should render Try It Now links for live projects', () => {
+      const tryNowButtons = screen.getAllByRole('link', { name: /Try It Now/i });
+      expect(tryNowButtons.length).toBe(3);
+
+      // Check that each link points to the correct lab
+      const fomoLink = tryNowButtons.find(link => link.getAttribute('href') === '/labs/fomo-meter');
+      const stoicLink = tryNowButtons.find(link => link.getAttribute('href') === '/labs/stoic-mirror');
+      const eli5Link = tryNowButtons.find(link => link.getAttribute('href') === '/labs/eli5-generator');
+
+      expect(fomoLink).toBeTruthy();
+      expect(stoicLink).toBeTruthy();
+      expect(eli5Link).toBeTruthy();
     });
   });
 
@@ -188,7 +199,7 @@ describe('LabsPage', () => {
   describe('Accessibility', () => {
     it('should use semantic HTML elements', () => {
       expect(screen.getByRole('main')).toBeInTheDocument();
-      
+
       const articles = screen.getAllByRole('article');
       expect(articles.length).toBe(3);
     });

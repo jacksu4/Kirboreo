@@ -183,14 +183,9 @@ Test structure:
 
 ## 🚢 Deployment
 
-### Vercel Configuration Note (React 19)
-This project uses React 19. To avoid peer dependency conflicts during Vercel deployment (specifically with legacy packages like `react-tilt`), we use a custom `.npmrc` configuration:
-```ini
-legacy-peer-deps=true
-```
-This is already configured in the repository.
-
 ### Deploy to Vercel (Recommended)
+
+This project uses React 19. The `.npmrc` configuration with `legacy-peer-deps=true` is already set up to avoid peer dependency conflicts.
 
 1. **Push to GitHub**:
 ```bash
@@ -206,25 +201,33 @@ git push origin main
    - Configure environment variables (same as `.env.local`)
    - Deploy!
 
-3. **Configure regions** (optional):
-Create `vercel.json`:
-```json
-{
-  "regions": ["hkg1", "sin1", "icn1"],
-  "functions": {
-    "app/api/chat/route.ts": {
-      "maxDuration": 60,
-      "memory": 1024
-    }
-  }
-}
-```
+**Environment Variables to Configure:**
+- `OPENAI_API_KEY` - OpenAI API key
+- `PINECONE_API_KEY` - Pinecone API key
+- `PINECONE_INDEX_NAME` - Pinecone index name (default: `knowledge`)
+- `NEXT_PUBLIC_SANITY_PROJECT_ID` - Sanity project ID
+- `NEXT_PUBLIC_SANITY_DATASET` - Sanity dataset (default: `production`)
+- `SANITY_API_TOKEN` - Sanity API token
+- `RESEND_API_KEY` - (Optional) Resend API key for contact form
+
+3. **Region Configuration** (Optional):
+The `vercel.json` file is configured for Hong Kong, Singapore, and Seoul regions with optimized function settings:
+- Function timeout: 60 seconds
+- Memory: 1024MB
 
 ### Alternative: Docker
 ```bash
 docker build -t kirboreo .
 docker run -p 3000:3000 --env-file .env.local kirboreo
 ```
+
+### Post-Deployment Checklist
+- [ ] Verify homepage loads
+- [ ] Test AI chat at `/chat`
+- [ ] Check stock analysis pages
+- [ ] Verify research articles load
+- [ ] Test contact form (if RESEND_API_KEY configured)
+- [ ] Monitor Vercel Analytics for performance
 
 ---
 
@@ -321,15 +324,51 @@ This project is licensed under the MIT License. See [LICENSE](./LICENSE) for det
 
 ---
 
+## 🧪 AI Labs
+
+The platform includes experimental AI features in the `/labs` section:
+
+### FOMO Meter
+Real-time sentiment analysis for stocks and cryptocurrencies powered by:
+- **Yahoo Finance**: News and price data
+- **GPT-4o**: AI-driven sentiment analysis with witty commentary
+- **Keyword Analysis**: Per-headline sentiment indicators
+
+**Features:**
+- Dynamic background colors based on sentiment (Fear/Greed scale)
+- Thermometer visualization (0-100 scale)
+- Smart ticker resolution (company name → ticker symbol)
+- News filtering for relevant headlines only
+- 5-minute caching with rate limiting
+
+**Try it:** Visit `/labs/fomo-meter` and enter a ticker (e.g., TSLA, BTC-USD, AAPL)
+
+---
+
 ## 👥 Contributing
 
-Contributions are welcome! Please:
+Contributions are welcome! Please follow these guidelines:
 
+### Development Workflow
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+3. Make your changes with tests
+4. Ensure all tests pass: `npm test`
+5. Commit using [Conventional Commits](https://www.conventionalcommits.org/):
+   - `feat:` - New features
+   - `fix:` - Bug fixes
+   - `docs:` - Documentation updates
+   - `test:` - Test additions
+   - `refactor:` - Code refactoring
+6. Push to your branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+### Code Standards
+- Use TypeScript with explicit types
+- Write tests for new features (aim for >80% coverage)
+- Follow existing code style
+- Add JSDoc comments for public APIs
+- Ensure `npm run build` and `npm run lint` pass
 
 ---
 
