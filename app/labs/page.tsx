@@ -7,7 +7,22 @@ export const metadata = {
   description: 'Explore our experimental AI-powered tools for investment research and financial analysis.',
 };
 
-const projects = [
+interface Project {
+  id: string;
+  emoji: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  why_fun: string;
+  why_useful: string;
+  example: string;
+  tech_stack: string[];
+  status: string;
+  gradient: string;
+  externalLink?: string;
+}
+
+const projects: Project[] = [
   {
     id: 'fomo-meter',
     emoji: '😱',
@@ -20,6 +35,20 @@ const projects = [
     tech_stack: ['Next.js', 'OpenAI API', 'Yahoo Finance', 'Vercel'],
     status: 'Live',
     gradient: 'linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%)',
+  },
+  {
+    id: 'ai-lab',
+    emoji: '🤖',
+    title: 'AI Lab',
+    subtitle: '实验性 AI 游乐场',
+    description: 'Explore cutting-edge AI experiments and prototypes. A playground for testing new AI capabilities, interactive demos, and experimental features before they become full products.',
+    why_fun: 'Get hands-on with the latest AI models and techniques. See what\'s possible with AI in finance and investment research through interactive experiments.',
+    why_useful: 'Stay ahead of the curve by exploring emerging AI technologies. Perfect for understanding how AI can transform investment analysis and decision-making.',
+    example: 'Try experimental AI features like advanced sentiment analysis, multi-modal data processing, custom fine-tuned models, and real-time AI assistants for market research.',
+    tech_stack: ['Next.js', 'OpenAI', 'Anthropic', 'LangChain', 'Vector DB'],
+    status: 'Live',
+    gradient: 'linear-gradient(135deg, #00d2ff 0%, #3a47d5 100%)',
+    externalLink: 'https://ai-lab-green.vercel.app/',
   },
   {
     id: 'stoic-mirror',
@@ -130,10 +159,22 @@ export default function LabsPage() {
                   {/* Card Footer */}
                   <div className={styles.cardFooter}>
                     {project.status === 'Live' ? (
-                      <Link href={`/labs/${project.id}`} className={styles.liveButton}>
-                        <span>🚀</span>
-                        <span>Try It Now</span>
-                      </Link>
+                      project.externalLink ? (
+                        <a 
+                          href={project.externalLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.liveButton}
+                        >
+                          <span>🚀</span>
+                          <span>Try It Now</span>
+                        </a>
+                      ) : (
+                        <Link href={`/labs/${project.id}`} className={styles.liveButton}>
+                          <span>🚀</span>
+                          <span>Try It Now</span>
+                        </Link>
+                      )
                     ) : (
                       <button className={styles.notifyButton} disabled>
                         <span>🔔</span>
